@@ -1,21 +1,33 @@
 module TicTacToe
   class Board
     def initialize()
-      @positions = [
+      @grid = [
         [nil, nil, nil],
         [nil, nil, nil],
         [nil, nil, nil]
       ]
-
-      LOGGER.debug("Initialized a board")
     end
 
     def place(symbol, position)
-      @positions[position.x][position.y] = symbol
+      symbol_at_position = symbol_at(position)
+      if symbol_at_position
+        LOGGER.info("position #{position.inspect} is already occupied by symbol #{symbol_at_position}")
+        raise InvalidPositionError.new(position, self)
+      else
+        @grid[position.x][position.y] = symbol
+      end
     end
 
     def symbol_at(position)
-      @positions[position.x][position.y]
+      @grid[position.x][position.y]
+    end
+
+    class InvalidPositionError < StandardError
+      attr_reader :position, :board
+      def initialize(position, board)
+        @position = position
+        @board = board
+      end
     end
   end
 end

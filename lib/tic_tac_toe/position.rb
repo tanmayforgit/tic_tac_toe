@@ -10,5 +10,9 @@ module TicTacToe
       @x = x.to_i
       @y = y.to_i
     end
+
+    def inspect
+      "(#{@x}, #{@y})"
+    end
   end
 end

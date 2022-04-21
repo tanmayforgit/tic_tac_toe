@@ -11,13 +11,23 @@ module TicTacToe
     describe '#place' do
       let(:board) { Board.new() }
       let(:position) { Position.new(x: 1, y: 1) }
-      let(:symbol_to_place) { TicTacToe::CIRCLE }
+      let(:symbol) { TicTacToe::CIRCLE }
 
-      context 'when nothing exists on the position' do
-        subject { board.place(symbol_to_place, position) }
+      subject { board.place(symbol, position) }
+      context 'When nothing exists on the position' do
         it 'places the passed symbol on the passed position' do
           expect{ subject }.not_to raise_error
-          expect(board.symbol_at(position)).to eq(symbol_to_place)
+          expect(board.symbol_at(position)).to eq(symbol)
+        end
+      end
+
+      context 'When a symbol already exists on the position' do
+        before do
+          board.place(symbol, position)
+        end
+
+        it 'raises error' do
+          expect{ subject }.to raise_error(Board::InvalidPositionError)
         end
       end
     end
