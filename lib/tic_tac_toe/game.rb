@@ -6,17 +6,22 @@ module TicTacToe
     attr_reader :action_to_perform, :p1_name
 
     def initialize()
+      @board = Board.new()
       @p1_name = nil
       @p2_name = nil
       @action_to_perform = nil
     end
 
     aasm do
+      # Describing the states
       state :idle, initial: true
       state :accepting_p1_name, after_enter: Proc.new { set_action(GameAction.new(:get_p1_name)) }
       state :accepting_p2_name, after_enter: Proc.new { set_action(GameAction.new(:get_p2_name)) }
       state :waiting_p1_to_move, after_enter: Proc.new { set_action(GameAction.new(:get_p1_move)) }
+      state :waiting_p2_to_move, after_enter: Proc.new { set_action(GameAction.new(:get_p2_move)) }
+      state :finished
 
+      # Describing the events and transitions
       event :start do
         transitions from: :idle, to: :accepting_p1_name
       end
@@ -29,15 +34,36 @@ module TicTacToe
         transitions from: :accepting_p2_name, to: :waiting_p1_to_move, if: :capture_and_validate_p2_name
       end
 
-      # By default if any state transition fails due to guard clauses (i.e. if condition mentioned in the transitions)
-      # Then aasm will raise AASM::InvalidTransition error.
-      # We are handling conditions in which transitions will fail gracefully by adding relevant errors to the game action
-      # We don't want game to raise error when a game event fails.
-      # Failing the transition with instrumenting what happened is sufficient for
-      # our use case
+      event :accept_p1_move do
+        transitions from: :waiting_p1_to_move, to: :waiting_p2_to_move, if: Proc.new { |position| capture_and_validate_move(TicTacToe::CROSS, position) }
+
+        after do
+          set_concluding_action_if_game_ends
+        end
+      end
+
+      event :accept_p2_move do
+        transitions from: :waiting_p2_to_move, to: :waiting_p1_to_move, if: Proc.new { |position| capture_and_validate_move(TicTacToe::CIRCLE, position) }
+
+        after do
+          set_concluding_action_if_game_ends
+        end
+      end
+
+      # By default if any state transition fails due to guard
+      # clauses (guard clauses are if condition mentioned in
+      # the transitions), then aasm will raise AASM::InvalidTransition error.
+      # Cases in which guard conditions will fail are handled by
+      # adding relevant errors to the current game action to perform.
+      # We don't want game to raise error when transition fails due to our
+      # guard clauses since that will unnecessarily complicate code
+      # using this class. Failing the transition with instrumenting
+      # what happened is sufficient for our use case
       error_on_all_events do |error|
-        if error.is_a?(AASM::InvalidTransition)
-          TicTacToe::LOGGER.error(error.message)
+        # AASM will add errors due to callback failures to failures array. If there
+        # are any failures then that would mean error was due to our guard clause
+        if error.is_a?(AASM::InvalidTransition) && error.failures.any?
+          TicTacToe::LOGGER.info("rescuing error #{error.inspect}")
         else
           raise error
         end
@@ -53,8 +79,33 @@ module TicTacToe
 
     private
 
-    def aasm_event_failed(event_name, old_state)
-      puts "called aasm_event_failed"
+    def set_concluding_action_if_game_ends
+      result = @board.result
+      if result
+        set_game_conclusion_action(result)
+        aasm.current_state= :finished
+        puts "state is #{state.inspect}"
+      end
+    end
+
+    def set_game_conclusion_action(result)
+      verdict = result.fetch(:verdict)
+      case verdict
+      when 'win'
+        victorious_symbol = result.fetch(:victor)
+        victor_name = (victorious_symbol == TicTacToe::CROSS ? @p1_name : @p2_name)
+        set_action(GameAction.new(:announce_victory, {name: victor_name}))
+      when 'draw'
+        set_action(GameAction.new(:announce_draw))
+      end
+    end
+
+    def capture_and_validate_move(symbol, position)
+      @board.place(symbol, position)
+      true
+    rescue Board::InvalidPositionError => e
+      @action_to_perform.add_error('Illegal move')
+      false
     end
 
     def set_action(action)
