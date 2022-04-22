@@ -11,10 +11,10 @@ module TicTacToe
       @action_to_perform = nil
     end
 
-    aasm() do
+    aasm do
       state :idle, initial: true
-      state :accepting_p1_name, after_enter: :ask_p1_name
-      state :accepting_p2_name, after_enter: :ask_p2_name
+      state :accepting_p1_name, after_enter: Proc.new { set_action(GameAction.new(:ask_p1_name)) }
+      state :accepting_p2_name, after_enter: Proc.new { set_action(GameAction.new(:ask_p2_name)) }
       state :waiting_p1_to_move, after_enter: Proc.new { set_action(GameAction.new(:get_p1_move)) }
 
       event :start do
@@ -29,18 +29,30 @@ module TicTacToe
         transitions from: :accepting_p2_name, to: :waiting_p1_to_move, if: :capture_and_validate_p2_name
       end
 
+      # We are handling InvalidStateTransitions gracefully by adding relevant errors to the game action
+      # We don't want game to raise error when a game event fails.
+      # Failing the transition silently and just instrumenting what happened is sufficient for
+      # our use case
+      error_on_all_events do |error|
+        if error.is_a?(AASM::InvalidTransition)
+          TicTacToe::LOGGER.error(error.message)
+        else
+          raise error
+        end
+      end
+
       # We don't want errors from one event to be shown for next event
       before_all_events :clear_current_action_errors
     end
 
-    private
-
-    def ask_p1_name
-      @action_to_perform = GameAction.new(:ask_p1_name)
+    def state
+      self.aasm.current_state
     end
 
-    def ask_p2_name
-      @action_to_perform = GameAction.new(:ask_p2_name)
+    private
+
+    def aasm_event_failed(event_name, old_state)
+      puts "called aasm_event_failed"
     end
 
     def set_action(action)
