@@ -13,8 +13,8 @@ module TicTacToe
 
     aasm do
       state :idle, initial: true
-      state :accepting_p1_name, after_enter: Proc.new { set_action(GameAction.new(:ask_p1_name)) }
-      state :accepting_p2_name, after_enter: Proc.new { set_action(GameAction.new(:ask_p2_name)) }
+      state :accepting_p1_name, after_enter: Proc.new { set_action(GameAction.new(:get_p1_name)) }
+      state :accepting_p2_name, after_enter: Proc.new { set_action(GameAction.new(:get_p2_name)) }
       state :waiting_p1_to_move, after_enter: Proc.new { set_action(GameAction.new(:get_p1_move)) }
 
       event :start do
@@ -29,9 +29,11 @@ module TicTacToe
         transitions from: :accepting_p2_name, to: :waiting_p1_to_move, if: :capture_and_validate_p2_name
       end
 
-      # We are handling InvalidStateTransitions gracefully by adding relevant errors to the game action
+      # By default if any state transition fails due to guard clauses (i.e. if condition mentioned in the transitions)
+      # Then aasm will raise AASM::InvalidTransition error.
+      # We are handling conditions in which transitions will fail gracefully by adding relevant errors to the game action
       # We don't want game to raise error when a game event fails.
-      # Failing the transition silently and just instrumenting what happened is sufficient for
+      # Failing the transition with instrumenting what happened is sufficient for
       # our use case
       error_on_all_events do |error|
         if error.is_a?(AASM::InvalidTransition)
