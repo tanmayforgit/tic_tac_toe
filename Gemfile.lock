@@ -1,6 +1,10 @@
 GEM
+  remote: https://rubygems.org/
   specs:
+    aasm (5.2.0)
+      concurrent-ruby (~> 1.0)
     ast (2.4.2)
+    concurrent-ruby (1.1.10)
     parallel (1.22.1)
     parser (3.1.2.0)
       ast (~> 2.4.1)
@@ -25,6 +29,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  aasm
   rubocop
 
 BUNDLED WITH
