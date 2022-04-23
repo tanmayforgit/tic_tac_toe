@@ -9,7 +9,7 @@ module TicTacToe
       @board = Board.new()
       @p1_name = nil
       @p2_name = nil
-      @action_to_perform = nil
+      set_action(GameAction.new(:give_introduction))
     end
 
     aasm do

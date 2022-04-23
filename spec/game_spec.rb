@@ -1,5 +1,15 @@
 module TicTacToe
   RSpec.describe Game do
+    describe 'initialization' do
+      subject { Game.new() }
+      it "Starts in idle state and next action to perform is to display board and instruction" do
+        expect(subject.state).to eq(:idle)
+
+        action_to_perform = game.action_to_perform
+        expect(action_to_perform.name).to eq(:give_introduction)
+      end
+    end
+
     let(:game) { Game.new() }
 
     describe '#start' do
