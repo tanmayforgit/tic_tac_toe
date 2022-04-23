@@ -57,7 +57,32 @@ module TicTacToe
       end
     end
 
+    def to_s
+      " ⎼⎼⎼⎼⎼ X ⎼⎼⎼⎼⎼▶\n"\
+      "│\n"\
+      "│   #{human_readable_row(0)}\n"\
+      "│  -----------\n"\
+      "Y   #{human_readable_row(1)}\n"\
+      "│  -----------\n"\
+      "│   #{human_readable_row(2)}\n"\
+      "▼\n"
+    end
+
     private
+
+    def human_readable_row(row_number)
+      positions = (0..2).map {|x_co_ordinate| Position.new(x: x_co_ordinate, y: row_number) }
+      positions.map { |position| human_readable_symbol_at(position) }.join(" | ")
+    end
+
+    def human_readable_symbol_at(position)
+      symbol_at_position = symbol_at(position)
+      if symbol_at_position
+        symbol_at_position
+      else
+        " "
+      end
+    end
 
     def all_positions_filled?
       !(@grid.flatten.any? { |s| s == nil })

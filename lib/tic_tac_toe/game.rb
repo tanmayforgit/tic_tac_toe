@@ -3,7 +3,7 @@ module TicTacToe
 
   class Game
     include AASM
-    attr_reader :action_to_perform, :p1_name
+    attr_reader :action_to_perform, :p1_name, :board
 
     def initialize()
       @board = Board.new()
@@ -84,7 +84,6 @@ module TicTacToe
       if result
         set_game_conclusion_action(result)
         aasm.current_state= :finished
-        puts "state is #{state.inspect}"
       end
     end
 
