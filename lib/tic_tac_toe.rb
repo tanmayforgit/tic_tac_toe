@@ -5,4 +5,10 @@ module TicTacToe
   CIRCLE = "O"
   CROSS = "X"
   LOGGER = TicTacToe::Logging.create_logger()
+
+  class << self
+    def play
+      GameRunner.new().run
+    end
+  end
 end

@@ -1,6 +1,6 @@
 module TicTacToe
   class GameRunner
-    def initialize(game = Game.new, interface)
+    def initialize(interface = CommandLineInterface, game = Game.new)
       @game = game
       @interface = interface
       @p1_name = nil
@@ -9,7 +9,6 @@ module TicTacToe
 
     def run
       action_to_perform = @game.action_to_perform
-
       while !game_ending_action?(action_to_perform)
         print_action_errors_if_any(action_to_perform)
 
@@ -26,10 +25,10 @@ module TicTacToe
           @p2_name = name
           @game.accept_p2_name(name)
         when :get_p1_move
-          position = @interface.get_move(@game.board)
+          position = @interface.get_move(@game.board, @p1_name)
           @game.accept_p1_move(position)
         when :get_p2_move
-          position = @interface.get_move(@game.board)
+          position = @interface.get_move(@game.board, @p2_name)
           @game.accept_p2_move(position)
         end
 
@@ -56,16 +55,14 @@ module TicTacToe
 
     def execute_game_end(game_ending_action)
       if game_ending_action.name == :announce_draw
-        @interface.announce_draw
+        @interface.announce_draw(@game.board)
       end
 
       if game_ending_action.name == :announce_victory
         victorious_symbol = game_ending_action.details.fetch(:symbol)
         victor = (victorious_symbol == TicTacToe::CROSS ? @p1_name : @p2_name)
-        @interface.announce_victory(victor)
+        @interface.announce_victory(@game.board, victor)
       end
-
-      @interface.print_board(@game.board)
     end
   end
 end

@@ -3,7 +3,7 @@ module TicTacToe
 
   class Game
     include AASM
-    attr_reader :action_to_perform, :p1_name, :board
+    attr_reader :action_to_perform, :board
 
     def initialize()
       @board = Board.new()
@@ -92,8 +92,7 @@ module TicTacToe
       case verdict
       when 'win'
         victorious_symbol = result.fetch(:victor)
-        victor_name = (victorious_symbol == TicTacToe::CROSS ? @p1_name : @p2_name)
-        set_action(GameAction.new(:announce_victory, {name: victor_name}))
+        set_action(GameAction.new(:announce_victory, {symbol: victorious_symbol}))
       when 'draw'
         set_action(GameAction.new(:announce_draw))
       end

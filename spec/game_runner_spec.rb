@@ -25,12 +25,12 @@ module TicTacToe
         )
       end
 
-      let(:game_runner) { GameRunner.new(game, interface) }
+      let(:game_runner) { GameRunner.new(interface, game) }
       # Game run will never end unless game gives draw or victory actions. Hence game should
       # always give one of those actions
       it "Runs draw action" do
         allow(game).to receive(:action_to_perform).and_return(announce_draw_action)
-        expect(interface).to receive(:announce_draw)
+        expect(interface).to receive(:announce_draw).with(game.board)
         game_runner.run
       end
 
@@ -56,15 +56,19 @@ module TicTacToe
       end
 
       it "Runs get_p1_move action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p1_move_action, announce_draw_action)
-        expect(interface).to receive(:get_move).with(game.board)
+        allow(game).to receive(:action_to_perform).and_return(get_p1_name_action, get_p1_move_action, announce_draw_action)
+        allow(game).to receive(:accept_p1_name)
+        allow(interface).to receive(:get_name).and_return('p1_name')
+        expect(interface).to receive(:get_move).with(game.board, 'p1_name')
         expect(game).to receive(:accept_p1_move).with(Position.new(x: 1, y: 1)) # We have mocked get_move interface to return Position.new(x: 1, y: 1)"
         game_runner.run
       end
 
       it "Runs get_p2_move action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p2_move_action, announce_draw_action)
-        expect(interface).to receive(:get_move).with(game.board)
+        allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, get_p2_move_action, announce_draw_action)
+        allow(game).to receive(:accept_p2_name)
+        allow(interface).to receive(:get_name).and_return('p2_name')
+        expect(interface).to receive(:get_move).with(game.board, 'p2_name')
         expect(game).to receive(:accept_p2_move).with(Position.new(x: 1, y: 1)) # We have mocked get_move interface to return Position.new(x: 1, y: 1)"
         game_runner.run
       end
@@ -75,7 +79,7 @@ module TicTacToe
         allow(game).to receive(:accept_p2_name)
 
         # announce victory action declares O as the winner. Circle means player 2
-        expect(interface).to receive(:announce_victory).with("p2_name")
+        expect(interface).to receive(:announce_victory).with(game.board, "p2_name")
 
         game_runner.run
       end

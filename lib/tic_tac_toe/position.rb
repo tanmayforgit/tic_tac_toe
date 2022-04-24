@@ -29,13 +29,16 @@ module TicTacToe
 
     class PositionOutOfBoard < StandardError; end
     class IncorrectFormat < StandardError; end
+    class EmptyString < StandardError; end
 
     class << self
       def from_string(string)
-        raise IncorrectFormat unless string.is_a?(String)
+        raise IncorrectFormat.new() unless string.is_a?(String)
+
+        raise EmptyString.new() unless string.length > 0
 
         comma_separated_strings = string.split(',')
-        raise IncorrectFormat unless comma_separated_strings.size == 2
+        raise IncorrectFormat.new() unless comma_separated_strings.size == 2
 
         x, y = *comma_separated_strings
         new(x: x, y: y)

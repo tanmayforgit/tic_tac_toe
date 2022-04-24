@@ -32,7 +32,6 @@ module TicTacToe
         it "Accepts p1 name, transitions to accepting_p2_name state and action_to_perform is get_p2_name" do
           expect{ subject }.to change{ game.state }.from(:accepting_p1_name).to(:accepting_p2_name)
 
-          expect(game.p1_name).to eq('p1 name')
           action_to_perform = game.action_to_perform
           expect(action_to_perform.name).to eq(:get_p2_name)
         end
@@ -115,7 +114,7 @@ module TicTacToe
           context 'When move results in a player winning' do
             before do
               # We are creating following scenario where
-              # move to 2,2 by p1 will win the game for him/her
+              # move to 2,2 by X player will win the game for him/her
               # | X | - | O |
               # | - | X | O |
               # | - | - | - |
@@ -128,11 +127,11 @@ module TicTacToe
 
             subject { game.accept_p1_move(Position.new(x: 2, y: 2)) }
 
-            it "Accepts the move and transitions to finished state and action_to_perform is to announce p1 victory" do
+            it "Accepts the move and transitions to finished state and action_to_perform is to announce victory for X player" do
               expect { subject }.to change { game.state }.from(:waiting_p1_to_move).to(:finished)
               action_to_perform = game.action_to_perform
               expect(action_to_perform.name).to eq(:announce_victory)
-              expect(action_to_perform.details.fetch(:name)).to eq("p1")
+              expect(action_to_perform.details.fetch(:symbol)).to eq(TicTacToe::CROSS)
             end
           end
 
