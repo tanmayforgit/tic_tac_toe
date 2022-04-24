@@ -20,11 +20,11 @@ module TicTacToe
         when :give_introduction
           @interface.print_introduction
           @game.start
-        when :get_p1_name
+        when :get_p1
           name = @interface.get_name("player 1")
           @p1_name = name
           @game.accept_p1_name(name)
-        when :get_p2_name
+        when :get_p2
           name = @interface.get_name("player 2")
           @p2_name = name
           @game.accept_p2_name(name)

@@ -14,10 +14,10 @@ module TicTacToe
 
     describe '#start' do
       subject { game.start }
-      it "starts by setting action_to_perform to get_p1_name" do
+      it "starts by setting action_to_perform to get_p1" do
         expect{ subject }.to change{ game.state }.from(:idle).to(:accepting_p1_name)
         action_to_perform = game.action_to_perform
-        expect(action_to_perform.name).to eq(:get_p1_name)
+        expect(action_to_perform.name).to eq(:get_p1)
       end
     end
 
@@ -29,11 +29,11 @@ module TicTacToe
       context "When valid p1 name is provided" do
         subject { game.accept_p1_name('p1 name') }
 
-        it "Accepts p1 name, transitions to accepting_p2_name state and action_to_perform is get_p2_name" do
+        it "Accepts p1 name, transitions to accepting_p2_name state and action_to_perform is get_p2" do
           expect{ subject }.to change{ game.state }.from(:accepting_p1_name).to(:accepting_p2_name)
 
           action_to_perform = game.action_to_perform
-          expect(action_to_perform.name).to eq(:get_p2_name)
+          expect(action_to_perform.name).to eq(:get_p2)
         end
       end
 
@@ -44,7 +44,7 @@ module TicTacToe
           expect{ subject }.not_to change{ game.state }
           expect(game.state).to eq(:accepting_p1_name)
           action_to_perform = game.action_to_perform
-          expect(action_to_perform.name).to eq(:get_p1_name)
+          expect(action_to_perform.name).to eq(:get_p1)
           expect(action_to_perform.errors).to eq(['p1 name should be present'])
         end
       end
@@ -76,7 +76,7 @@ module TicTacToe
 
           expect(game.state).to eq(:accepting_p2_name)
           action_to_perform = game.action_to_perform
-          expect(action_to_perform.name).to eq(:get_p2_name)
+          expect(action_to_perform.name).to eq(:get_p2)
           expect(action_to_perform.errors).to eq(['p2 name should not match p1 name'])
         end
       end

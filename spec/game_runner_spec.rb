@@ -6,8 +6,8 @@ module TicTacToe
 
       let(:game) { Game.new() }
       let(:introduction_action) { double(name: :give_introduction, errors: []) }
-      let(:get_p1_name_action) { double(name: :get_p1_name, errors: []) }
-      let(:get_p2_name_action) { double(name: :get_p2_name, errors: []) }
+      let(:get_p1_action) { double(name: :get_p1, errors: []) }
+      let(:get_p2_action) { double(name: :get_p2, errors: []) }
       let(:get_p1_move_action) { double(name: :get_p1_move, errors: []) }
       let(:get_p2_move_action) { double(name: :get_p2_move, errors: []) }
       let(:announce_draw_action) { double(name: :announce_draw, errors: []) }
@@ -41,22 +41,22 @@ module TicTacToe
         game_runner.run
       end
 
-      it "Runs get_p1_name action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p1_name_action, announce_draw_action)
+      it "Runs get_p1 action" do
+        allow(game).to receive(:action_to_perform).and_return(get_p1_action, announce_draw_action)
         expect(interface).to receive(:get_name).with("player 1")
         expect(game).to receive(:accept_p1_name).with("name") # We have mocked get_name interface to return "name"
         game_runner.run
       end
 
-      it "Runs get_p2_name action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, announce_draw_action)
+      it "Runs get_p2 action" do
+        allow(game).to receive(:action_to_perform).and_return(get_p2_action, announce_draw_action)
         expect(interface).to receive(:get_name).with("player 2")
         expect(game).to receive(:accept_p2_name).with("name") # We have mocked get_name interface to return "name"
         game_runner.run
       end
 
       it "Runs get_p1_move action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p1_name_action, get_p1_move_action, announce_draw_action)
+        allow(game).to receive(:action_to_perform).and_return(get_p1_action, get_p1_move_action, announce_draw_action)
         allow(game).to receive(:accept_p1_name)
         allow(interface).to receive(:get_name).and_return('p1_name')
         expect(interface).to receive(:get_move).with(game.board, 'p1_name')
@@ -65,7 +65,7 @@ module TicTacToe
       end
 
       it "Runs get_p2_move action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, get_p2_move_action, announce_draw_action)
+        allow(game).to receive(:action_to_perform).and_return(get_p2_action, get_p2_move_action, announce_draw_action)
         allow(game).to receive(:accept_p2_name)
         allow(interface).to receive(:get_name).and_return('p2_name')
         expect(interface).to receive(:get_move).with(game.board, 'p2_name')
@@ -74,7 +74,7 @@ module TicTacToe
       end
 
       it "Runs announce_victory action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, announce_victory_action)
+        allow(game).to receive(:action_to_perform).and_return(get_p2_action, announce_victory_action)
         allow(interface).to receive(:get_name).with("player 2").and_return("p2_name")
         allow(game).to receive(:accept_p2_name)
 

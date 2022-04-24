@@ -39,8 +39,8 @@ module TicTacToe
     aasm do
       # Describing the states
       state :idle, initial: true
-      state :accepting_p1_name, after_enter: Proc.new { set_action(GameAction.new(:get_p1_name)) }
-      state :accepting_p2_name, after_enter: Proc.new { set_action(GameAction.new(:get_p2_name)) }
+      state :accepting_p1_name, after_enter: Proc.new { set_action(GameAction.new(:get_p1)) }
+      state :accepting_p2_name, after_enter: Proc.new { set_action(GameAction.new(:get_p2)) }
       state :waiting_p1_to_move, after_enter: Proc.new { set_action(GameAction.new(:get_p1_move)) }
       state :waiting_p2_to_move, after_enter: Proc.new { set_action(GameAction.new(:get_p2_move)) }
       state :finished
