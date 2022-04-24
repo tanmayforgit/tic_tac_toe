@@ -4,11 +4,11 @@ module TicTacToe
     # This class serves as a class running the game state machine
     # It asks for action to perform to the game state machine and
     # implements it with the help of interface it is passed
-    def initialize(interface = CommandLineInterface, game = Game.new)
+    def initialize(player1, player2, interface = CommandLineInterface, game = Game.new)
       @game = game
       @interface = interface
-      @p1_name = nil
-      @p2_name = nil
+      @player1 = player1
+      @player2 = player2
     end
 
     def run
@@ -21,18 +21,16 @@ module TicTacToe
           @interface.print_introduction
           @game.start
         when :get_p1_name
-          name = @interface.get_name("player 1")
-          @p1_name = name
+          name = @player1.keep_or_change_name
           @game.accept_p1_name(name)
         when :get_p2_name
-          name = @interface.get_name("player 2")
-          @p2_name = name
+          name = @player2.keep_or_change_name
           @game.accept_p2_name(name)
         when :get_p1_move
-          position = @interface.get_move(@game.board, @p1_name)
+          position = @player1.get_move(@game.board)
           @game.accept_p1_move(position)
         when :get_p2_move
-          position = @interface.get_move(@game.board, @p2_name)
+          position = @player2.get_move(@game.board)
           @game.accept_p2_move(position)
         end
 
@@ -64,7 +62,7 @@ module TicTacToe
 
       if game_ending_action.name == :announce_victory
         victorious_symbol = game_ending_action.details.fetch(:symbol)
-        victor = (victorious_symbol == TicTacToe::CROSS ? @p1_name : @p2_name)
+        victor = (victorious_symbol == TicTacToe::CROSS ? @player1.name : @player2.name)
         @interface.announce_victory(@game.board, victor)
       end
     end

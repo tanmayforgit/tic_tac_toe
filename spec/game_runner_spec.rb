@@ -12,6 +12,8 @@ module TicTacToe
       let(:get_p2_move_action) { double(name: :get_p2_move, errors: []) }
       let(:announce_draw_action) { double(name: :announce_draw, errors: []) }
       let(:announce_victory_action) { double(name: :announce_victory, errors: [], details: {symbol: TicTacToe::CIRCLE}) }
+      let(:player1) { double(keep_or_change_name: "p1", name: "p1", get_move: Position.new(x: 1, y: 0)) }
+      let(:player2) { double(keep_or_change_name: "p2", name: "p2", get_move: Position.new(x: 1, y: 2)) }
 
       let(:interface) do
         double(
@@ -25,7 +27,7 @@ module TicTacToe
         )
       end
 
-      let(:game_runner) { GameRunner.new(interface, game) }
+      let(:game_runner) { GameRunner.new(player1, player2, interface, game) }
       # Game run will never end unless game gives draw or victory actions. Hence game should
       # always give one of those actions
       it "Runs draw action" do
@@ -43,43 +45,37 @@ module TicTacToe
 
       it "Runs get_p1_name action" do
         allow(game).to receive(:action_to_perform).and_return(get_p1_name_action, announce_draw_action)
-        expect(interface).to receive(:get_name).with("player 1")
-        expect(game).to receive(:accept_p1_name).with("name") # We have mocked get_name interface to return "name"
+        expect(player1).to receive(:keep_or_change_name)
+        expect(game).to receive(:accept_p1_name).with(player1.name) # We have mocked get_name interface to return "name"
         game_runner.run
       end
 
       it "Runs get_p2_name action" do
         allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, announce_draw_action)
-        expect(interface).to receive(:get_name).with("player 2")
-        expect(game).to receive(:accept_p2_name).with("name") # We have mocked get_name interface to return "name"
+        expect(player2).to receive(:keep_or_change_name)
+        expect(game).to receive(:accept_p2_name).with('p2') # We have mocked get_name interface to return "name"
         game_runner.run
       end
 
       it "Runs get_p1_move action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p1_name_action, get_p1_move_action, announce_draw_action)
-        allow(game).to receive(:accept_p1_name)
-        allow(interface).to receive(:get_name).and_return('p1_name')
-        expect(interface).to receive(:get_move).with(game.board, 'p1_name')
-        expect(game).to receive(:accept_p1_move).with(Position.new(x: 1, y: 1)) # We have mocked get_move interface to return Position.new(x: 1, y: 1)"
+        allow(game).to receive(:action_to_perform).and_return(get_p1_move_action, announce_draw_action)
+        expect(player1).to receive(:get_move).with(game.board)
+        expect(game).to receive(:accept_p1_move).with(player1.get_move)
         game_runner.run
       end
 
       it "Runs get_p2_move action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, get_p2_move_action, announce_draw_action)
-        allow(game).to receive(:accept_p2_name)
-        allow(interface).to receive(:get_name).and_return('p2_name')
-        expect(interface).to receive(:get_move).with(game.board, 'p2_name')
-        expect(game).to receive(:accept_p2_move).with(Position.new(x: 1, y: 1)) # We have mocked get_move interface to return Position.new(x: 1, y: 1)"
+        allow(game).to receive(:action_to_perform).and_return(get_p2_move_action, announce_draw_action)
+        expect(player2).to receive(:get_move).with(game.board)
+        expect(game).to receive(:accept_p2_move).with(player2.get_move)
         game_runner.run
       end
 
       it "Runs announce_victory action" do
-        allow(game).to receive(:action_to_perform).and_return(get_p2_name_action, announce_victory_action)
-        allow(interface).to receive(:get_name).with("player 2").and_return("p2_name")
-        allow(game).to receive(:accept_p2_name)
+        allow(game).to receive(:action_to_perform).and_return(announce_victory_action)
 
         # announce victory action declares O as the winner. Circle means player 2
-        expect(interface).to receive(:announce_victory).with(game.board, "p2_name")
+        expect(interface).to receive(:announce_victory).with(game.board, player2.name)
 
         game_runner.run
       end

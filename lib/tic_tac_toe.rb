@@ -8,7 +8,9 @@ module TicTacToe
 
   class << self
     def play
-      GameRunner.new().run
+      player1 = HumanPlayer.new(1)
+      player2 = HumanPlayer.new(2)
+      GameRunner.new(player1, player2).run
     end
   end
 end
