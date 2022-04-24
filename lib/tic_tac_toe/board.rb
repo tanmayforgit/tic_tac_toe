@@ -2,12 +2,9 @@ module TicTacToe
   ##
   # This class represents 3 * 3 board of a tic tac toe game
   class Board
-    def initialize()
-      @grid = [
-        [nil, nil, nil],
-        [nil, nil, nil],
-        [nil, nil, nil]
-      ]
+
+    def initialize(grid = empty_grid)
+      @grid = grid
     end
 
     def place(symbol, position)
@@ -51,12 +48,8 @@ module TicTacToe
       nil
     end
 
-    class InvalidPositionError < StandardError
-      attr_reader :position, :board
-      def initialize(position, board)
-        @position = position
-        @board = board
-      end
+    def available_positions
+      all_positions.select { |position| symbol_at(position) == nil }
     end
 
     def to_s
@@ -70,7 +63,27 @@ module TicTacToe
       "▼\n"
     end
 
+    class InvalidPositionError < StandardError
+      attr_reader :position, :board
+      def initialize(position, board)
+        @position = position
+        @board = board
+      end
+    end
+
     private
+
+    def all_positions
+      @all_positions ||= construct_all_positions
+    end
+
+    def construct_all_positions
+      (0..2).map do |x|
+        (0..2).map do |y|
+          Position.new(x: x, y: y)
+        end
+      end.flatten
+    end
 
     def human_readable_row(row_number)
       positions = (0..2).map {|x_co_ordinate| Position.new(x: x_co_ordinate, y: row_number) }
@@ -118,6 +131,14 @@ module TicTacToe
         symbol_at(Position.new(x: 0, y: 2)),
         symbol_at(Position.new(x: 1, y: 1)),
         symbol_at(Position.new(x: 2, y: 0))
+      ]
+    end
+
+    def empty_grid
+      [
+        [nil, nil, nil],
+        [nil, nil, nil],
+        [nil, nil, nil]
       ]
     end
   end

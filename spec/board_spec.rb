@@ -137,5 +137,33 @@ module TicTacToe
         end
       end
     end
+
+    describe '#available_positions' do
+      let(:board) do
+        Board.new([
+          [nil, 'O', 'X'],
+          ['X', nil, 'O'],
+          ['X', 'O', nil]
+        ])
+      end
+
+      it 'Returns a random valid move on the board' do
+        # there are only 3 valid positions on the board
+        # (0,0), (1,1), (2,2)
+
+        correct_available_positions = [
+          Position.new(x: 0, y: 0),
+          Position.new(x: 1, y: 1),
+          Position.new(x:2, y: 2)
+        ]
+
+        returned_positions = board.available_positions
+
+        expect(returned_positions.size).to eq(3)
+        returned_positions.each do |returned_position|
+          expect(correct_available_positions).to include(returned_position)
+        end
+      end
+    end
   end
 end
