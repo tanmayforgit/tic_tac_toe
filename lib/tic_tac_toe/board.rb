@@ -1,4 +1,6 @@
 module TicTacToe
+  ##
+  # This class represents 3 * 3 board of a tic tac toe game
   class Board
     def initialize()
       @grid = [

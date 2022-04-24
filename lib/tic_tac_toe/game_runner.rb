@@ -1,5 +1,9 @@
 module TicTacToe
   class GameRunner
+    ##
+    # This class serves as a class running the game state machine
+    # It asks for action to perform to the game state machine and
+    # implements it with the help of interface it is passed
     def initialize(interface = CommandLineInterface, game = Game.new)
       @game = game
       @interface = interface

@@ -1,8 +1,7 @@
 module TicTacToe
   RSpec.describe TicTacToe do
-    # This test case is to test end to end flow once.
+    # This test file is to test end to end flow once.
     # Finer cases are handled in respective unit test cases
-
 
     before(:each) do
       # Setting the stdout to stringIO so that we can match the
@@ -14,18 +13,15 @@ module TicTacToe
       $stdout = STDOUT
     end
 
-
     it 'Plays a game of tic tac toe which can results in a players victory' do
       # Test case simulates accepting player 1 name as name1 and
       # player 2 name as name2
 
       # It then simulates following board position and then we assert that
       # player 1 won the game
-
       # | X | - | O |
       # | - | X | O |
       # | - | - | X |
-
 
       allow(STDIN).to receive(:gets).and_return(
         "name1",
@@ -46,11 +42,9 @@ module TicTacToe
 
       # It then simulates following board position and then we assert that
       # it was a draw
-
       # | X | O | X |
       # | X | O | X |
       # | O | X | O |
-
 
       allow(STDIN).to receive(:gets).and_return(
         "name1",

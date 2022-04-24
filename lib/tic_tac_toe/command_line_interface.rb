@@ -1,5 +1,8 @@
 module TicTacToe
   module CommandLineInterface
+    ##
+    # This module acts as a interface to talk with user via command
+    # line
    class << self
       def print_board(board)
         puts board

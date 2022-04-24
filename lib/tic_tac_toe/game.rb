@@ -1,6 +1,30 @@
 module TicTacToe
   require 'aasm'
+  ##
+  # This class serves as a state machine
+  #
+  # This is how the machine success flow looks like:
+  # (IDLE)--start-->(ACCEPTING_P1_NAME)
+  # (ACCEPTING_P1_NAME)--accept_p1_name(valid_name)-->(ACCEPTING_P2_NAME)
+  # (ACCEPTING_P2_NAME)--accept_p2_name(valid_name)-->(WAITING_P1_TO_MOVE)
+  # (WAITING_P1_TO_MOVE)--valid_move-->(WAITING_P2_TO_MOVE)
+  # (WAITING_P2_TO_MOVE--valid_move-->(WAITING_P1_TO_MOVE)
+  # .
+  # .
+  # .
+  # (ACCEPTING_P1/P2_MOVE)--game_ending_move-->(FINISHED)
 
+  # Various other flows are:
+  # (ACCEPTING_P1_NAME)--accept_p1_name(invalid_name)-->(ACCEPTING_P1_NAME)
+  # (ACCEPTING_P2_NAME)--accept_p2_name(invalid_name)-->(ACCEPTING_P2_NAME)
+  # (WAITING_P1_TO_MOVE)--invalid_move-->(WAITING_P1_TO_MOVE)
+  # (WAITING_P2_TO_MOVE)--invalid_move-->(WAITING_P2_TO_MOVE)
+
+  # For any state that the game is in, this class answers what is the next action
+  # that needs to happen on the game
+  # e.g. if game is in WAITING_P1_TO_MOVE state then game.action_to_perform will be get_p1_move
+  # Game starts with game.action_to_perform as give_introduction
+  #
   class Game
     include AASM
     attr_reader :action_to_perform, :board
