@@ -37,7 +37,7 @@ This is how the program is structured
            V       V
             Position
 
-GameRunner: Runs the game state machine and inetracts with user via  CommandLineInterface
+GameRunner: Runs the game state machine and interacts with user via  CommandLineInterface
 Game      : Represents game behavious as a state machine
 Board     : Represents tic tac toe board
 Position  : Value object to pass positions on tic tac toe board
