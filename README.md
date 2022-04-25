@@ -68,10 +68,14 @@ This is how things are structured
                |                      |
                V                      V
            GameRunner       --------PlayerSetup
-           |       |        |                 |
-           V       |        |            -----------
-          Game     |        |            |         |
-           |       |        |            V         V
+           |       |        |            |
+           |       |        |            |
+           |       |        |            |
+           |       |---->---|------------|
+           |       |        |            V
+           V       |        |        -----------
+          Game     |        |        |         |
+           |       |        |        V         V
            |       |        |    HumanPlayer   RandomBot
            |       |        |      |               |
            |       |        |      |               |
