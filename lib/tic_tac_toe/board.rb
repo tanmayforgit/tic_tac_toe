@@ -2,7 +2,7 @@ module TicTacToe
   ##
   # This class represents 3 * 3 board of a tic tac toe game
   class Board
-
+    attr_reader :grid
     def initialize(grid = empty_grid)
       @grid = grid
     end
@@ -61,6 +61,10 @@ module TicTacToe
       "│  -----------\n"\
       "│   #{human_readable_row(2)}\n"\
       "▼\n"
+    end
+
+    def ==(other)
+      other.class == self.class && other.grid == self.grid
     end
 
     class InvalidPositionError < StandardError

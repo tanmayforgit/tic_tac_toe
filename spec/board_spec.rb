@@ -165,5 +165,34 @@ module TicTacToe
         end
       end
     end
+
+    describe "#possible_future_moves" do
+      let(:board) do
+        Board.new([
+          ['O', 'O', 'X'],
+          ['X', 'X', 'O'],
+          ['X', 'O', nil]
+        ])
+      end
+
+      let(:symbol_to_place) { TicTacToe::CIRCLE }
+
+      subject { board.possible_moves_with_future_final_positions }
+
+      it "returns all possible_moves_with_future_final_positions" do
+        only_possible_future_position = Position.new(x: 2, y: 2)
+        future_boards_with_the_move = [Board.new([
+          ['O', 'O', 'X'],
+          ['X', 'X', 'O'],
+          ['X', 'O', 'O']
+        ])]
+
+        corresponding_position = Position.new(x: 2, y: 2)
+        expect(subject).to eq({
+          "(2,2)" => [future_boards_with_the_move]
+        })
+
+      end
+    end
   end
 end
