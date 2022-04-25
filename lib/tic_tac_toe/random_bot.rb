@@ -7,7 +7,7 @@ module TicTacToe
     end
 
     ##
-    # Why are we letting bot change the name?
+    # Why are we letting bot to change the name?
     # => We have a validation that player 1 name cannot
     #    equal player 2 name. In a rare scenario where someone
     #    decides to play two random bots with each other, we don't

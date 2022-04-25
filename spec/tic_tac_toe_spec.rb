@@ -13,8 +13,10 @@ module TicTacToe
       $stdout = STDOUT
     end
 
-    it 'Plays a game of tic tac toe which can results in a players victory' do
-      # Test case simulates accepting player 1 name as name1 and
+    it 'Can facilitate a 2 human player game of tic tac toe which can results in a players victory' do
+      # Test case starts by setting up 2 human players
+      #
+      # Then test case simulates accepting player 1 name as name1 and
       # player 2 name as name2
 
       # It then simulates following board position and then we assert that
@@ -24,6 +26,8 @@ module TicTacToe
       # | - | - | X |
 
       allow(STDIN).to receive(:gets).and_return(
+        "1",  # 1 means player type is human
+        "1",  # 1 means player type is human
         "name1",
         "name2",
         "0,0",
@@ -36,8 +40,10 @@ module TicTacToe
       expect($stdout.string).to include("name1 won the game")
     end
 
-    it 'Plays a game of tic tac toe which can results in draw' do
-      # Test case simulates accepting player 1 name as name1 and
+    it 'Can facilitate a 2 human player game of tic tac toe which can results in draw' do
+      # Test case starts by setting up 2 human players
+      #
+      # Then test case simulates accepting player 1 name as name1 and
       # player 2 name as name2
 
       # It then simulates following board position and then we assert that
@@ -47,6 +53,8 @@ module TicTacToe
       # | O | X | O |
 
       allow(STDIN).to receive(:gets).and_return(
+        "1", # 1 means player type is human
+        "1", # 1 means player type is human
         "name1",
         "name2",
         "0,0",
@@ -61,6 +69,19 @@ module TicTacToe
       )
       TicTacToe.play()
       expect($stdout.string).to include("Game was a draw")
+    end
+
+    it 'Can facilitate a 2 random bot player game of tic tac toe which ultimately finishes' do
+      # Test case starts by setting up 2 random bot players
+      # We can never predict result of the game since moves are completely random
+      # However it should conclude at some point
+
+      allow(STDIN).to receive(:gets).and_return(
+        "2", # 2 means player type is random bot
+        "2", # 2 means player type is random bot
+      )
+      TicTacToe.play()
+      expect($stdout.string).to include("Game was a draw").or include('won the game')
     end
   end
 end

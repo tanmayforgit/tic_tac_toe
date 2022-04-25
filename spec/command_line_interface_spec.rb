@@ -34,6 +34,13 @@ module TicTacToe
       end
     end
 
+    describe '#print' do
+      it 'prints it to stdout' do
+        CommandLineInterface.print('This shall be printed')
+        expect($stdout.string).to include('This shall be printed')
+      end
+    end
+
     describe "#get_move" do
       let(:board) { Board.new() }
       subject { CommandLineInterface.get_move(board, 'Tick Tack Toer') }

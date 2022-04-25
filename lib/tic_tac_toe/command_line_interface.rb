@@ -12,6 +12,10 @@ module TicTacToe
         puts "\e[31m#{emsg}\e[0m"
       end
 
+      def print(msg)
+        puts msg
+      end
+
       def print_introduction
         puts_within_dashed_lines("Welcome to Command line Tic Tac Toe")
 
