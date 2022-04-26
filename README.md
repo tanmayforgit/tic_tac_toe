@@ -118,7 +118,7 @@ This is how things are structured
    |       |---->---|------------|
    |       |        |            V
    V       |        |        --------------------------
-   Game     |        |        |         |              |
+  Game     |        |        |         |              |
    |       |        |        V         V              V
    |       |        |    HumanPlayer   RandomBot    SmartBot
    |       |        |      |               |        |      |
