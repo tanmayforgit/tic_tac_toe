@@ -49,5 +49,13 @@ module TicTacToe
       player2 = PlayerSetup.call(2)
       GameRunner.new(player1, player2).run
     end
+
+    def the_other_symbol(symbol)
+      symbol == CROSS ? CIRCLE : CROSS
+    end
+
+    def get_symbol(rank)
+      rank == 1 ? CROSS : CIRCLE
+    end
   end
 end

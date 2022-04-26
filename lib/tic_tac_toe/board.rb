@@ -67,6 +67,41 @@ module TicTacToe
       other.class == self.class && other.grid == self.grid
     end
 
+    def make_a_copy
+      duplicate_grid = @grid.map(&:dup)
+      Board.new(duplicate_grid)
+    end
+
+    def possible_paths_with_verdicts(symbol_to_place)
+      paths_after_a_step = Path.new([], self, symbol_to_place).traverse_one_step
+      concluded_paths = []
+      while paths_after_a_step.any?
+        paths_after_two_setps = []
+        paths_after_a_step.each do |path|
+          if path.result
+            concluded_paths << path
+          else
+            paths_after_two_setps << path.traverse_one_step
+          end
+          paths_after_a_step = paths_after_two_setps.flatten
+        end
+      end
+      concluded_paths
+    end
+
+    def corner_positions
+      [
+        Position.new(x: 0, y: 0),
+        Position.new(x: 0, y: 2),
+        Position.new(x: 2, y: 0),
+        Position.new(x: 2, y: 2),
+      ]
+    end
+
+    def empty?
+      @grid.flatten.all? {|place| place == nil }
+    end
+
     class InvalidPositionError < StandardError
       attr_reader :position, :board
       def initialize(position, board)
