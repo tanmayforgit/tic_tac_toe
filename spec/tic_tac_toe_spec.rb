@@ -83,5 +83,18 @@ module TicTacToe
       TicTacToe.play()
       expect($stdout.string).to include("Game was a draw").or include('won the game')
     end
+
+    it 'Can facilitate a smart bot game which ultimately finishes' do
+      # Test case starts by setting up 2 smart bot players
+      # We can never predict result of the game since moves are decided runtime
+      # However it should always conclude at some point
+
+      allow(STDIN).to receive(:gets).and_return(
+        "3", # 2 means player type is random bot
+        "3", # 2 means player type is random bot
+      )
+      TicTacToe.play()
+      expect($stdout.string).to include("Game was a draw").or include('won the game')
+    end
   end
 end

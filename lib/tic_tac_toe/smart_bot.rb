@@ -1,5 +1,7 @@
 module TicTacToe
   class SmartBot
+    include BotNameHelper
+    attr_reader :name
     def initialize(rank)
       @name = nil
       @my_symbol = TicTacToe.get_symbol(rank)
