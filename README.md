@@ -62,8 +62,8 @@ Position   : Value object to pass positions on tic tac toe board
 each other or vs bot
 - Added RandomBot as a first bot you can play against
 
-This is how things are structured
 ```
+This is how things are structured
             TicTacToe-----------------
                |                      |
                V                      V
@@ -96,6 +96,56 @@ GameRunner : Gets the player setup and runs the game state machine and
              interacts with user via CLI
 HumanPlayer: Represents human playing the game.
 RandomBot  : Bot which randomly gives the next valid move
+CommandLine: CLI to manage all terminal based IO
+Interface
+Game       : Represents game behavious as a state machine
+Board      : Represents tic tac toe board
+Position   : Value object to pass positions on tic tac toe board
+```
+
+## v1.1.1
+- Added smart bot
+
+This is how things are structured
+```
+   TicTacToe-----------------
+      |                      |
+      V                      V
+   GameRunner       --------PlayerSetup
+   |       |        |            |
+   |       |        |            |
+   |       |        |            |
+   |       |---->---|------------|
+   |       |        |            V
+   V       |        |        --------------------------
+   Game     |        |        |         |              |
+   |       |        |        V         V              V
+   |       |        |    HumanPlayer   RandomBot    SmartBot
+   |       |        |      |               |        |      |
+   |       |        |      |               |        |      |
+   |       V        V      V               |---<-----      |
+   |      CommandLineInterface             V               V
+   |       |      |        |               |----<-------- Path
+   |       |      V        V               |               |
+   |       |    STDOUT   STDIN             |               |
+   V       |                               |               V
+Board<-----|-------------------------------               Move
+   |       |                                               |
+   |       |                                               |
+   V       V                                               |
+   Position<----------------------------------------------
+
+PlayerSetup: Module responsible for setting up players as bots or humans
+GameRunner : Gets the player setup and runs the game state machine and
+             interacts with user via CLI
+HumanPlayer: Represents human playing the game.
+RandomBot  : Bot which randomly gives the next valid move
+SmartBot   : A somewhat smart bot which judges the game one step ahead.
+             Starts at a corner if it is the first one playing.
+Move       : Represents a position along with a symbol
+Path       : Represents a path the game can move into. Holds the moves to
+             reach that path, how the board looks like and verdict if
+             path is concluding into win or draw
 CommandLine: CLI to manage all terminal based IO
 Interface
 Game       : Represents game behavious as a state machine
