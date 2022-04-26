@@ -3,7 +3,6 @@ module TicTacToe
     attr_reader :moves, :result
 
     def initialize(moves, board, symbol_to_place)
-      CommandLineInterface.print_board(board)
       @moves = moves
       @board = board
       @symbol_to_place = symbol_to_place
