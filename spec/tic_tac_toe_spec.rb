@@ -90,8 +90,8 @@ module TicTacToe
       # However it should always conclude at some point
 
       allow(STDIN).to receive(:gets).and_return(
-        "3", # 2 means player type is random bot
-        "3", # 2 means player type is random bot
+        "3", # 3 means player type is random bot
+        "3", # 3 means player type is random bot
       )
       TicTacToe.play()
       expect($stdout.string).to include("Game was a draw").or include('won the game')
