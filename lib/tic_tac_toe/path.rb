@@ -11,11 +11,9 @@ module TicTacToe
     end
 
     def traverse_one_step
-      puts "traversing a step"
       if @result == nil
         next_symbol_to_place = TicTacToe.the_other_symbol(@symbol_to_place)
         @board.available_positions.map do |position|
-          puts "iterating for position #{position}"
           moves_traversed = @moves + [GameMove.new(position, @symbol_to_place)]
           copied_board = @board.make_a_copy
           copied_board.place(@symbol_to_place, position)
