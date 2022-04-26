@@ -8,6 +8,8 @@ module TicTacToe
           HumanPlayer.new(player_rank)
         when '2'
           RandomBot.new()
+        when '3'
+          SmartBot.new(player_rank)
         else
           CommandLineInterface.print_error('Unknown response')
           call(player_rank)

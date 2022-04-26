@@ -33,6 +33,15 @@ module TicTacToe
         end
       end
 
+      context 'End user opts for smart bot' do
+        it 'Returns SmartBot instance' do
+          allow(STDIN).to receive(:gets).and_return('3')
+          expected_op_msg = "Please enter player #{player_rank} type:\n1. Human  2. Random Bot 3. Smart Bot"
+          expect(subject).to be_an_instance_of(SmartBot)
+          expect($stdout.string).to include(expected_op_msg)
+        end
+      end
+
       context 'End user enters unknown input' do
         it 'Asks again and again till end user enters valid response' do
           allow(STDIN).to receive(:gets).and_return('5', '1')

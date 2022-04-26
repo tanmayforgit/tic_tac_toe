@@ -165,5 +165,41 @@ module TicTacToe
         end
       end
     end
+
+    describe '#class_methods' do
+      describe "#possible_paths_with_verdicts" do
+        let(:board) do
+          Board.new([
+            ['O', 'X', 'O'],
+            ['X', 'X', 'O'],
+            ['X', nil, nil]
+          ])
+        end
+
+        let(:symbol_to_place) { TicTacToe::CIRCLE }
+
+        subject { board.possible_paths_with_verdicts(symbol_to_place) }
+
+        it "returns all possible move sequences with verdicts" do
+          # There are two possible future paths.
+          # 1. If we place circle at 1,2 then cross needs to be placed
+          # at 2,2 and it will be draw.
+          # 2. If we place circle at 2,2 then it will be victory for white
+          expect(subject.size).to eq(2)
+          circle_winning_path = subject.detect { |path| path.result == { verdict: 'win', victor: symbol_to_place } }
+          expect(circle_winning_path).to be_truthy
+          p_22 = Position.new(x: 2, y: 2)
+          p_12 = Position.new(x: 1, y: 2)
+          expect(circle_winning_path.moves).to eq([GameMove.new(p_22, TicTacToe::CIRCLE)])
+
+          draw_path = subject.detect { |path| path.result == {verdict: 'draw'} }
+          expect(draw_path).to be_truthy
+          expect(draw_path.moves).to eq([
+            GameMove.new(p_12, TicTacToe::CIRCLE),
+            GameMove.new(p_22, TicTacToe::CROSS)
+          ])
+        end
+      end
+    end
   end
 end
