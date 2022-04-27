@@ -27,6 +27,20 @@ module TicTacToe
           expect { Position.from_string('1-2') }.to raise_error(Position::IncorrectFormat)
         end
       end
+
+      context 'String is in single number format' do
+        it 'Converts and returns position in x,y format' do
+          expect(Position.from_string('1')).to eq(Position.new(x: 0, y: 0))
+          expect(Position.from_string('3')).to eq(Position.new(x: 2, y: 0))
+          expect(Position.from_string('4')).to eq(Position.new(x: 0, y: 1))
+          expect(Position.from_string('5')).to eq(Position.new(x: 1, y: 1))
+          expect(Position.from_string('9')).to eq(Position.new(x: 2, y: 2))
+
+          expect { Position.from_string('0') }.to raise_error(Position::PositionOutOfBoard)
+          expect { Position.from_string('10') }.to raise_error(Position::PositionOutOfBoard)
+          expect { Position.from_string('abcd') }.to raise_error(Position::IncorrectFormat)
+        end
+      end
     end
   end
 end

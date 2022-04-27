@@ -33,9 +33,12 @@ module TicTacToe
         puts "5. To place X like shown below a player will have to "\
             "enter 2,0 when his turn comes.\n"\
             "   To place O like shown below a player will have to"\
-            "enter 1,2 when his turn comes.\n\n"
+            "enter 1,2 when his turn comes.\n"\
+            "                   OR\n"\
+            "   enter 3 and 8 respectively like phone dial"
         puts introductory_board
-
+        puts "These are the placeholders. You can enter in any format"
+        print_placeholders
       end
 
       def get_name(name_holder)
@@ -85,6 +88,13 @@ module TicTacToe
         puts(dashed_line)
       end
 
+      def print_placeholders
+        puts '1 | 2 | 3               0,0 | 1,0 | 2,0'
+        puts '----------             -----------------'
+        puts '4 | 5 | 6      OR       0,1 | 1,1 | 2,1'
+        puts '----------             -----------------'
+        puts '7 | 8 | 9               0,2 | 1,2 | 2,2'
+      end
     end
   end
 end

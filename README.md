@@ -153,5 +153,17 @@ Board      : Represents tic tac toe board
 Position   : Value object to pass positions on tic tac toe board
 
 ```
+
+## v1.1.2
+- Added phone dial style way of accepting user input
+- in this format this is how tic tac toe board looks like.\
+  User can enter below number to place a symbol over there
+```
+   1 | 2 | 3
+   ----------
+   4 | 5 | 6
+   ----------
+   7 | 8 | 9
+ ```
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
