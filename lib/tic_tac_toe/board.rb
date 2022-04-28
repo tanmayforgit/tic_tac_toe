@@ -3,6 +3,7 @@ module TicTacToe
   # This class represents 3 * 3 board of a tic tac toe game
   class Board
     attr_reader :grid
+
     def initialize(grid = empty_grid)
       @grid = grid
     end
@@ -24,26 +25,26 @@ module TicTacToe
     def result
       [
         TicTacToe::CIRCLE,
-        TicTacToe::CROSS
+        TicTacToe::CROSS,
       ].each do |symbol|
         # checking for horizontal victory
         @grid.each do |row|
-          return { verdict: 'win', victor: symbol } if row.all? { |s| s == symbol }
+          return { verdict: "win", victor: symbol } if row.all? { |s| s == symbol }
         end
 
         # checking for veritical victory
         @grid.transpose.each do |column|
-          return { verdict: 'win', victor: symbol } if column.all? { |s| s == symbol }
+          return { verdict: "win", victor: symbol } if column.all? { |s| s == symbol }
         end
       end
 
       # Checking for diagonal victory
       symbol_at_center = symbol_at(Position.new(x: 1, y: 1))
       if symbol_at_center && diagonal_victory_for?(symbol_at_center)
-        return { verdict: 'win', victor: symbol_at_center }
+        return { verdict: "win", victor: symbol_at_center }
       end
 
-      return { verdict: 'draw' } if all_positions_filled?
+      return { verdict: "draw" } if all_positions_filled?
 
       nil
     end
@@ -53,13 +54,13 @@ module TicTacToe
     end
 
     def to_s
-      " ⎼⎼⎼⎼⎼ X ⎼⎼⎼⎼⎼▶\n"\
-      "│\n"\
-      "│   #{human_readable_row(0)}\n"\
-      "│  -----------\n"\
-      "Y   #{human_readable_row(1)}\n"\
-      "│  -----------\n"\
-      "│   #{human_readable_row(2)}\n"\
+      " ⎼⎼⎼⎼⎼ X ⎼⎼⎼⎼⎼▶\n" \
+      "│\n" \
+      "│   #{human_readable_row(0)}\n" \
+      "│  -----------\n" \
+      "Y   #{human_readable_row(1)}\n" \
+      "│  -----------\n" \
+      "│   #{human_readable_row(2)}\n" \
       "▼\n"
     end
 
@@ -99,11 +100,12 @@ module TicTacToe
     end
 
     def empty?
-      @grid.flatten.all? {|place| place == nil }
+      @grid.flatten.all? { |place| place == nil }
     end
 
     class InvalidPositionError < StandardError
       attr_reader :position, :board
+
       def initialize(position, board)
         @position = position
         @board = board
@@ -125,7 +127,7 @@ module TicTacToe
     end
 
     def human_readable_row(row_number)
-      positions = (0..2).map {|x_co_ordinate| Position.new(x: x_co_ordinate, y: row_number) }
+      positions = (0..2).map { |x_co_ordinate| Position.new(x: x_co_ordinate, y: row_number) }
       positions.map { |position| human_readable_symbol_at(position) }.join(" | ")
     end
 
@@ -153,7 +155,7 @@ module TicTacToe
     def diagonals
       [
         symbols_at_diagonal_with_0_0,
-        symbols_at_diagonal_with_0_2
+        symbols_at_diagonal_with_0_2,
       ]
     end
 
@@ -161,7 +163,7 @@ module TicTacToe
       [
         symbol_at(Position.new(x: 0, y: 0)),
         symbol_at(Position.new(x: 1, y: 1)),
-        symbol_at(Position.new(x: 2, y: 2))
+        symbol_at(Position.new(x: 2, y: 2)),
       ]
     end
 
@@ -169,7 +171,7 @@ module TicTacToe
       [
         symbol_at(Position.new(x: 0, y: 2)),
         symbol_at(Position.new(x: 1, y: 1)),
-        symbol_at(Position.new(x: 2, y: 0))
+        symbol_at(Position.new(x: 2, y: 0)),
       ]
     end
 
@@ -177,7 +179,7 @@ module TicTacToe
       [
         [nil, nil, nil],
         [nil, nil, nil],
-        [nil, nil, nil]
+        [nil, nil, nil],
       ]
     end
   end

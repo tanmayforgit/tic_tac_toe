@@ -27,13 +27,14 @@ module TicTacToe
   #
   class Game
     include AASM
-    attr_reader :action_to_perform, :board
+    attr_reader :action_to_perform, :board, :id
 
     def initialize()
       @board = Board.new()
       @p1_name = nil
       @p2_name = nil
       set_action(GameAction.new(:give_introduction))
+      @id = rand(1_00_000..1_000_000)
     end
 
     aasm do

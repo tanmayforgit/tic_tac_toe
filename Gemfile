@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
 group :development, :test do
-  gem 'rubocop', require: false
-  gem 'rspec'
+  gem "rubocop", require: false
+  gem "rspec"
 end
 
-gem 'aasm'
+gem "aasm"

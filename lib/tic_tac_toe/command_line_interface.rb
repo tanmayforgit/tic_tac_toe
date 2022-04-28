@@ -16,6 +16,11 @@ module TicTacToe
         puts msg
       end
 
+      def accept_create_or_join_game
+        puts_within_dashed_lines("Do you want to join or create game. c. Create j.join")
+        accept_new_or_join_game()
+      end
+
       def print_introduction
         puts_within_dashed_lines("Welcome to Command line Tic Tac Toe")
 
@@ -76,6 +81,19 @@ module TicTacToe
       rescue Position::EmptyString => e
         print_error('Empty move is invalid')
         get_position_from_command_line
+      end
+
+      def accept_new_or_join_game
+        user_input = STDIN.gets().strip
+        case(user_input)
+        when 'c'
+          "create"
+        when 'j'
+          "join"
+        else
+          print_error("invalid input")
+          accept_new_or_join_game
+        end
       end
 
       def dashed_line

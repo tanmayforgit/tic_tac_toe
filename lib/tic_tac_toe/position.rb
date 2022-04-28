@@ -9,8 +9,8 @@ module TicTacToe
     def initialize(x:, y:)
       x = x.to_i
       y = y.to_i
-      raise PositionOutOfBoard.new unless x.between?(0,2)
-      raise PositionOutOfBoard.new unless y.between?(0,2)
+      raise PositionOutOfBoard.new unless x.between?(0, 2)
+      raise PositionOutOfBoard.new unless y.between?(0, 2)
       @x = x.to_i
       @y = y.to_i
     end
@@ -53,7 +53,7 @@ module TicTacToe
           # and 1,4,7 into 0 and 2,5,8 into 1
           x = (remainder_with_3 == 0 ? 2 : remainder_with_3 - 1)
           remainder_with_3 = int_position % 3
-          y = (int_position -1) / 3
+          y = (int_position - 1) / 3
 
           new(x: x, y: y)
         else
@@ -65,7 +65,7 @@ module TicTacToe
           # ----------------
           # 0,2 | 1,2 | 2,2
 
-          comma_separated_strings = string.split(',')
+          comma_separated_strings = string.split(",")
           raise IncorrectFormat.new() unless comma_separated_strings.size == 2
 
           x, y = *comma_separated_strings
